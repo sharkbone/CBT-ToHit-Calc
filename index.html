@@ -96,7 +96,9 @@
         <option value="short">Short</option>
         <option value="medium">Medium</option>
         <option value="long">Long</option>
-      </select>
+      </select><br/>
+      <label for="minRange">Minimum Range: </label><input type="number" id="minRange" value="0" /><button id="minRangeP">+</button><button id="minRangeM">-</button><br/>
+      <label for="targetRange">Range to Target: </label><input type="number" id="targetRange" value="0" /><button id="targetRangeP">+</button><button id="targetRangeM">-</button><br/>
     </div>
     </form>
   </div>
@@ -137,6 +139,12 @@
     let LtreesM = document.getElementById("LtreesM");
     let HtreesP = document.getElementById("HtreesP");
     let HtreesM = document.getElementById("HtreesM");
+    let minRange = document.getElementById("minRange");
+    let minRangeP = document.getElementById("minRangeP");
+    let minRangeM = document.getElementById("minRangeM");
+    let targetRange = document.getElementById("targetRange");
+    let targetRangeP = document.getElementById("targetRangeP");
+    let targetRangeM = document.getElementById("targetRangeM");
 
     // I need a function to calculate the modified to hit number
     function calculateToHit() {
@@ -166,6 +174,12 @@
       if (range.value === "short") result += 0;
       if (range.value === "medium") result += 2;
       if (range.value === "long") result += 4;
+      if (minRange.value > 0) 
+      {
+        let minRangeMod = 0;
+        minRangeMod = minRange.value - targetRange.value + 1;
+        if (minRangeMod > 0) result += minRangeMod;
+      }
 
       if (result > 12) result += ", impossible to hit"
       if ((Number(lightTrees.value) + (Number(heavyTrees.value) * 2)) > 2) result += ", LOS blocked by trees";
@@ -173,13 +187,16 @@
       displayNum.innerText = result;
     }
 
-    function clearSelections() {
+    function clearSelections(e) {
+      e.preventDefault();
       gunnery.value = 0;
       aMove.value = 0;
       tMove.value = 0;
       lightTrees.value = 0;
       heavyTrees.value = 0;
       heat.value = 0;
+      minRange.value = 0;
+      targetRange.value = 0;
 
       jump.checked = false;
       lightTarget.checked = false;
@@ -229,6 +246,8 @@
     targetingComputer.addEventListener("change", calculateToHit);
     pulseWeapon.addEventListener("change", calculateToHit);
     immobile.addEventListener("change", calculateToHit);
+    minRange.addEventListener("change", calculateToHit);
+    targetRange.addEventListener("change", calculateToHit);
     clearBtn.addEventListener("click", clearSelections);
 
     gunneryP.addEventListener("click", changeInputValue);
@@ -243,6 +262,10 @@
     LtreesM.addEventListener("click", changeInputValue);
     HtreesP.addEventListener("click", changeInputValue);
     HtreesM.addEventListener("click", changeInputValue);
+    minRangeP.addEventListener("click", changeInputValue);
+    minRangeM.addEventListener("click", changeInputValue);
+    targetRangeP.addEventListener("click", changeInputValue);
+    targetRangeM.addEventListener("click", changeInputValue);
 
   </script>
 </html>
